@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Clean WaterWorks
 // @namespace    http://fortheyin.com/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Cleans up WaterlooWorks to be more UI friendly
 // @author       Andy Yin
 // @match        https://waterlooworks.uwaterloo.ca/myAccount/*
@@ -65,6 +65,22 @@
     $postingsTable.find('td').css('white-space', 'normal');
   }
 
+  function bottomPagination() {
+    // Remove old pagination clones
+    $('.--cww-pagination').remove();
+
+    // Fetch latest pagination
+    var $paginationClone = $('.pagination').clone();
+    if ($paginationClone.length === 0) {
+      return;
+    }
+
+    // Add class tag for later deletion
+    $paginationClone.addClass('--cww-pagination');
+    $paginationClone.css('margin-top', '10px');
+    $('#mainContentDiv > .row-fluid > .span12').append($paginationClone);
+  }
+
   function clickAnywhereMailbox() {
     var $mailbox = $('#dashboard_userCommonMyMessagesTableID');
     if ($mailbox.length === 0) {
@@ -97,6 +113,7 @@
 
   sidebarToNav();
   normalizeJobPostings();
+  bottomPagination();
   clickAnywhereMailbox();
 
   // Override load job postings table to renormalize the table after sort
@@ -107,6 +124,7 @@
         callback();
       }
       normalizeJobPostings();
+      bottomPagination();
     });
   };
 
